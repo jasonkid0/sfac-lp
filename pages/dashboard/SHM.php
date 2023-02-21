@@ -71,7 +71,7 @@ include '../../includes/session.php';
 
                         <div class="row d-flex justify-content-center mx-4">
                             <div class="col-md-6 m-1 ">
-                                <form method="GET" action="SCS.php">
+                                <form method="GET" action="SHM.php">
                                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
                                         <div class="input-group">
                                             <!-- <span class="input-group-text text-body"><i class  ="fas fa-search"
