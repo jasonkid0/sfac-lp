@@ -117,6 +117,52 @@ include '../../includes/session.php';
                                                     </li>
                                                 </ul>
                                             </div>
+                                            <a class="btn btn-block bg-gradient-primary mb-3 text-xs"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modal-notification<?php echo $id; ?>"><i
+                                                    class="fas fa-user-check"></i>&nbsp; Undrop</a>
+
+                                            <div class="modal fade" id="modal-notification<?php echo $id; ?>"
+                                                tabindex="-1" role="dialog" aria-labelledby="modal-notification"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog modal-danger modal-dialog-centered modal-"
+                                                    role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h6 class="modal-title text-danger"
+                                                                id="modal-title-notification"><i
+                                                                    class="fas fa-exclamation-triangle">
+                                                                </i>
+                                                                Warning
+                                                            </h6>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="py-3 text-center">
+                                                                <i class="fas fa-trash-alt text-9xl"></i>
+                                                                <h4 class="text-gradient text-primary mt-4">
+                                                                    Undrop Student!</h4>
+                                                                <p>Are you sure you want to undrop
+                                                                    <br>
+                                                                    <i><b><?php echo $row['fullname']; ?></b></i>
+                                                                    from <br>
+                                                                    <i><b><?php echo $row['course']; ?></b></i>?
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a href="userData/ctrl.edit.undrop.php?stud_id=<?php echo $id; ?>"
+                                                                class="btn btn-white text-white bg-primary">undrop</a>
+                                                            <button type="button"
+                                                                class="btn btn-link text-secondary btn-outline-dark ml-auto"
+                                                                data-bs-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <!-- <a class="btn btn-block bg-gradient-danger mb-3 text-xs"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#modal-notification<?php echo $id; ?>"><i

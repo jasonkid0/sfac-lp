@@ -69,6 +69,27 @@ include '../../includes/session.php';
                            
                         </div>
                         <hr class="horizontal dark mt-0">
+
+                        <div class="row d-flex justify-content-center mx-4">
+                            <div class="col-md-6 m-1 ">
+                                <form method="GET" action="SN.php">
+                                    <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                                        <div class="input-group">
+                                            <!-- <span class="input-group-text text-body"><i class  ="fas fa-search"
+                                                            aria-hidden="true"></i></span> -->
+                                            <input type="text" class="form-control" name="search_text"
+                                                placeholder="Search Student"
+                                                <?php if (!empty($_GET['search_text'])) {
+                                                                                                                                        echo 'value="' . $_GET['search_text'] . '"';
+                                                                                                                                    }  ?>>
+                                            <button class="btn-sm btn bg-gradient-dark ms-auto mb-0" type="submit"
+                                                title="Send" name="search"><i class="fas fa-search text-lg"
+                                                    aria-hidden="true"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                         <div class="table-responsive px-4 my-4">
                             <table class=" table table-hover responsive nowrap m-0" id="datatable-basic"
                                 style="width: 100%;">
@@ -97,14 +118,19 @@ include '../../includes/session.php';
                                 <tbody>
 
                                     <?php
-
+                                    if (isset($_GET['search'])) {
+                                        $_GET['search_text'] = addslashes($_GET['search_text']);
                                     $pendStud = $db->query("SELECT *, CONCAT(S.firstname, ' ', S.middlename, ' ', S.lastname) AS fullname
                                             FROM tbl_schoolyears SY
                                             LEFT JOIN tbl_courses C USING(course_id)
                                             LEFT JOIN tbl_students S USING(stud_id)
                                             LEFT JOIN tbl_year_levels YL USING(year_id)
                                             WHERE remark IN ('Approved') AND C.course_id = '19' AND ay_id IN ('$_SESSION[AC]') AND sem_id IN ('$_SESSION[S]')
-                                            ORDER BY sy_id ") or die($db->error);
+                                            AND (firstname LIKE '%$_GET[search_text]%' OR
+                                            middlename LIKE '%$_GET[search_text]%' OR
+                                            lastname LIKE '%$_GET[search_text]%' OR
+                                            course_abv LIKE '%$_GET[search_text]%' OR
+                                            stud_no LIKE '%$_GET[search_text]%') ORDER BY sy_id ") or die($db->error);
 
                                     while ($row = $pendStud->fetch_array()) {
                                         $id = $row['sy_id'];
@@ -162,7 +188,7 @@ include '../../includes/session.php';
                                         </td>
                                     </tr>
                                     <!-- END ROWS -->
-                                    <?php }
+                                    <?php } }
                                     ?>
                                 </tbody>
                             </table>

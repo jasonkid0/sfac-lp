@@ -10,19 +10,19 @@ include '../../includes/session.php';
 
 <?php
 
-if (isset($_GET['BSBA-FM'])) {
-    $courseEnrollee_id = $_GET['BSBA-FM'];
-    $course_name = "Financial Management";
- 
-} elseif (isset($_GET['BSBA-OM'])) {
-    $courseEnrollee_id = $_GET['BSBA-OM'];
-    $course_name = "Operations Management";
-  
+if (isset($_GET['course_display'])) {
+    $courseEnrollee_id = $_GET['course_display'];
+    
+    $course_name_fetch = mysqli_query($db, "SELECT * FROM tbl_courses WHERE course_id = '$_GET[course_display]'");
+    while($row2 = mysqli_fetch_array($course_name_fetch)) {
+        $course_name = $row2['course'];
+    }
 } else {
-    $courseEnrollee_id = 2;
-    $course_name = "Marketing Management";
-   
+    $courseEnrollee_id = 0;
+    $course_name = "";
+
 }
+
 
 ?>
 
@@ -78,7 +78,7 @@ if (isset($_GET['BSBA-FM'])) {
 
                                                 echo'
                                                 <div class="col col-sm-auto">
-                                                    <button class="btn btn-icon btn-3 btn-dark" value="'.$displayBAcourses['course_id'].'" name="'.$displayBAcourses['course_abv'].'">
+                                                    <button class="btn btn-icon btn-3 btn-dark" value="'.$displayBAcourses['course_id'].'" name="course_display">
                                                         <span class="btn-inner--icon"><i class="fas fa-laptop"></i></span>
                                                         <span class="btn-inner--text">'.$displayBAcourses['course_abv'].'</span>
                                                         <p class="text-sm text-nowrap mb-0">
@@ -99,6 +99,26 @@ if (isset($_GET['BSBA-FM'])) {
                             </div>
                         </div>
                         <hr class="horizontal dark mt-0">
+
+                        <div class="row d-flex justify-content-center mx-4">
+                            <div class="col-md-6 m-1 ">
+                                <form method="GET" action="SBA.php">
+                                    <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                                        <div class="input-group">
+                                            <!-- <span class="input-group-text text-body"><i class  ="fas fa-search"
+                                                            aria-hidden="true"></i></span> -->
+                                            <input type="text" class="form-control" name="search_text"
+                                                placeholder="Search Student"
+                                                <?php if (!empty($_GET['search_text'])){                                                                           echo 'value="' . $_GET['search_text'] . '"';                                                           }  ?>>
+                                            <input type="text" value="<?php echo $courseEnrollee_id?>" name="course_display" hidden>
+                                            <button class="btn-sm btn bg-gradient-dark ms-auto mb-0" type="submit"
+                                                title="Send" name="search"><i class="fas fa-search text-lg"
+                                                    aria-hidden="true"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                         <div class="table-responsive px-4 my-4">
                             <table class=" table table-hover responsive nowrap m-0" id="datatable-basic"
                                 style="width: 100%;">
@@ -127,15 +147,20 @@ if (isset($_GET['BSBA-FM'])) {
                                 <tbody>
 
                                     <?php
-
-                                   
+                                    if (isset($_GET['search'])) {
+                                        $_GET['search_text'] = addslashes($_GET['search_text']);
+                                                                    
                                     $pendStud = $db->query("SELECT *, CONCAT(S.firstname, ' ', S.middlename, ' ', S.lastname) AS fullname
                                             FROM tbl_schoolyears SY
                                             LEFT JOIN tbl_courses C USING(course_id)
                                             LEFT JOIN tbl_students S USING(stud_id)
                                             LEFT JOIN tbl_year_levels YL USING(year_id)
                                             WHERE remark IN ('Approved')AND SY.course_id IN ('$courseEnrollee_id') AND ay_id IN ('$_SESSION[AC]') AND sem_id IN ('$_SESSION[S]')
-                                            ORDER BY sy_id ") or die($db->error);
+                                            AND (firstname LIKE '%$_GET[search_text]%' OR
+                                            middlename LIKE '%$_GET[search_text]%' OR
+                                            lastname LIKE '%$_GET[search_text]%' OR
+                                            course_abv LIKE '%$_GET[search_text]%' OR
+                                            stud_no LIKE '%$_GET[search_text]%') ORDER BY sy_id ") or die($db->error);
 
                                     while ($row = $pendStud->fetch_array()) {
                                         $id = $row['sy_id'];
@@ -184,7 +209,7 @@ if (isset($_GET['BSBA-FM'])) {
                                         </td>
                                     </tr>
                                     <!-- END ROWS -->
-                                    <?php }
+                                    <?php } }
                                     ?>
                                 </tbody>
                             </table>
