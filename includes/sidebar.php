@@ -1382,6 +1382,16 @@
                 </div>
             </li>
             ';
+            echo '<li class="nav-item">
+                <a href="../faqs/faqs.php" class="nav-link"
+                    role="button" aria-expanded="false">
+                    <div
+                    class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <i class="fas fa-question text-dark"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">FAQs</span>
+                </a>
+            </li>';
             } else if ($_SESSION['role'] == "Adviser") {
                 $query = mysqli_query($db, "SELECT * FROM tbl_faculties F LEFT JOIN tbl_departments D ON D.department_id =
             F.department_id WHERE faculty_id = '$faculty_id'") or die(mysqli_error($db));
@@ -2307,6 +2317,16 @@
                     }
                 }
                 // End curriculum / sidebar
+                echo '<li class="nav-item">
+                <a href="../faqs/faqs.php" class="nav-link"
+                    role="button" aria-expanded="false">
+                    <div
+                    class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <i class="fas fa-question text-dark"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">FAQs</span>
+                </a>
+            </li>';
             }
             ?>
 
